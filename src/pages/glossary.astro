@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getGlossaryTerms } from '../lib/cosmic-service';
+import { BookOpen, Sparkles, Search } from 'lucide-react';
+
+const terms = getGlossaryTerms();
+---
+
+<Layout
+  title="Scientific Glossary & Astrophysics Lexicon | The Cosmic Inquiry"
+  description="A searchable dictionary of astronomy, relativity, stellar physics, and cosmological terminology curated by Albin Thomas."
+>
+  <div class="min-h-screen pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 mb-4">
+        <BookOpen className="w-3.5 h-3.5" />
+        <span>Astrophysics Lexicon</span>
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black font-heading text-white tracking-tight">
+        Scientific Glossary
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-slate-300 font-body leading-relaxed">
+        Key terminology, relativistic formulas, and foundational concepts defining modern astronomy and theoretical physics.
+      </p>
+    </div>
+
+    <!-- Terms Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {terms.map((item) => (
+        <div class="p-6 rounded-3xl bg-cosmic-900/80 border border-violet-500/20 hover:border-emerald-500/40 transition-all shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest">
+                {item.category}
+              </span>
+              {item.pronunciation && (
+                <span class="text-[11px] font-mono text-slate-400 italic">
+                  [{item.pronunciation}]
+                </span>
+              )}
+            </div>
+
+            <h2 class="text-xl font-bold font-heading text-white mb-3">
+              {item.term}
+            </h2>
+
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-body mb-4">
+              {item.definition}
+            </p>
+
+            {item.formula && (
+              <div class="my-3 p-3 rounded-xl bg-cosmic-950 border border-violet-500/20 text-center font-mono text-xs sm:text-sm text-cyan-300">
+                Formula: {item.formula}
+              </div>
+            )}
+          </div>
+
+          <div class="pt-3 border-t border-violet-500/10 text-xs font-mono text-slate-400">
+            <span class="text-slate-300 font-semibold">Significance:</span> {item.significance}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

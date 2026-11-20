@@ -1,0 +1,162 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CosmicSplashScreen from '../components/animations/CosmicSplashScreen';
+import SolarSystem3D from '../components/solar-system/SolarSystem3D';
+import CosmicJourney from '../components/animations/CosmicJourney';
+import CategoryGrid from '../components/topics/CategoryGrid';
+import CosmicChronicleSection from '../components/news/CosmicChronicleSection';
+import TrendingTopicsSection from '../components/topics/TrendingTopicsSection';
+import { getCategories, getTopics, getNews } from '../lib/cosmic-service';
+import { CREATOR_NAME } from '../lib/cosmic-data';
+import { ArrowDown, Sparkles, Orbit, Compass, Clock, BookOpen } from 'lucide-react';
+
+const categories = await getCategories();
+const topics = await getTopics();
+const news = await getNews();
+---
+
+<Layout
+  title="The Cosmic Inquiry | Beyond Everything We Know"
+  description="Explore the universe through an advanced digital observatory. Interactive 3D solar system, astrophysics discoveries, black holes, the Big Bang, and cosmology curated by Albin Thomas."
+>
+  <!-- 3.1 Initial Splash Screen Animation -->
+  <CosmicSplashScreen client:load />
+
+  <!-- 3.2 Cinematic Hero Section -->
+  <section class="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <!-- Atmospheric deep space background glow -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-violet-600/15 via-cyan-500/10 to-amber-500/5 blur-[120px] rounded-full"></div>
+    </div>
+
+    <!-- Editorial Creator Attribution Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-[0.2em] text-cyan-300 bg-cosmic-900/80 border border-cyan-500/30 backdrop-blur-md mb-6 shadow-lg shadow-cyan-950/50">
+      <Sparkles className="w-3.5 h-3.5 text-stellar-gold animate-spin-slow" />
+      <span>Scientific Observatory • Architect: {CREATOR_NAME}</span>
+    </div>
+
+    <!-- Hero Heading per Part 3.2 -->
+    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight text-white max-w-5xl leading-none">
+      BEYOND EVERYTHING <br />
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-300 to-white">
+        WE KNOW.
+      </span>
+    </h1>
+
+    <!-- Supporting Text per Part 3.2 -->
+    <p class="mt-6 text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl font-body leading-relaxed">
+      "Journey through space, time, matter and existence. Discover the extraordinary phenomena that shape our universe and explore the mysteries that remain beyond our understanding."
+    </p>
+
+    <!-- Primary Action Buttons -->
+    <div class="mt-10 flex flex-col sm:flex-row items-center gap-4 z-10">
+      <a
+        href="#solar-system"
+        class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-all shadow-xl shadow-violet-600/30 hover:scale-105"
+      >
+        EXPLORE THE UNIVERSE
+      </a>
+
+      <a
+        href="#chronicle"
+        class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-cosmic-900/80 hover:bg-cosmic-800 border border-violet-500/30 hover:border-violet-500/60 text-slate-200 hover:text-white font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-all backdrop-blur-md"
+      >
+        DISCOVER THE LATEST
+      </a>
+    </div>
+
+    <!-- Scroll Indicator per Part 3.2 -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+      <span class="text-[10px] font-mono tracking-widest text-slate-500 uppercase">
+        Scroll to enter
+      </span>
+      <div class="w-[2px] h-10 bg-gradient-to-b from-cyan-400 via-violet-500 to-transparent animate-pulse"></div>
+    </div>
+  </section>
+
+  <!-- 3.3 Interactive 3D Solar System Section -->
+  <section id="solar-system" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest text-cyan-400 bg-cyan-950/40 border border-cyan-500/30 mb-3">
+        <Orbit className="w-3.5 h-3.5" />
+        <span>3D Orbital Simulator</span>
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-bold font-heading text-white">
+        The Solar System
+      </h2>
+      <p class="mt-3 text-slate-400 text-sm sm:text-base font-body">
+        Rotate, zoom, and interact with the planetary architecture. Click any celestial body to inspect its physical parameters and launch dedicated exploration pages.
+      </p>
+    </div>
+
+    <!-- Three.js interactive component -->
+    <SolarSystem3D client:only="react" />
+  </section>
+
+  <!-- 3.4 Scroll-triggered Cinematic Journey -->
+  <CosmicJourney client:visible />
+
+  <!-- Part 4: Curated Category Discovery -->
+  <CategoryGrid categories={categories} client:visible />
+
+  <!-- Part 5: The Cosmic Chronicle (News & Discoveries) -->
+  <CosmicChronicleSection news={news} client:visible />
+
+  <!-- Part 6: Trending Scientific Inquiries -->
+  <TrendingTopicsSection topics={topics} client:visible />
+
+  <!-- Part 11: Additional Modules Callout Banner (Timeline & Glossary) -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Timeline Banner -->
+      <a
+        href="/timeline"
+        class="group p-8 rounded-3xl bg-gradient-to-br from-cosmic-900 via-cosmic-850 to-cosmic-950 border border-amber-500/20 hover:border-amber-400/50 transition-all duration-300 hover:shadow-[0_0_35px_rgba(245,158,11,0.2)] flex flex-col justify-between"
+      >
+        <div>
+          <div class="w-10 h-10 rounded-2xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-stellar-gold mb-4">
+            <Clock className="w-5 h-5" />
+          </div>
+          <span class="text-xs font-mono text-stellar-gold uppercase tracking-widest block mb-1">
+            Universal Chronology
+          </span>
+          <h3 class="text-2xl font-bold font-heading text-white group-hover:text-stellar-amber transition-colors">
+            Interactive Universe Timeline
+          </h3>
+          <p class="mt-2 text-sm text-slate-400 leading-relaxed font-body">
+            Traverse 13.8 billion years from the quantum Planck epoch to primordial nucleosynthesis, the cosmic dawn, and future heat death.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-amber-500/15 flex items-center justify-between text-xs font-mono text-stellar-gold font-semibold">
+          <span>ENTER TIMELINE</span>
+          <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </a>
+
+      <!-- Glossary Banner -->
+      <a
+        href="/glossary"
+        class="group p-8 rounded-3xl bg-gradient-to-br from-cosmic-900 via-cosmic-850 to-cosmic-950 border border-emerald-500/20 hover:border-emerald-400/50 transition-all duration-300 hover:shadow-[0_0_35px_rgba(16,185,129,0.2)] flex flex-col justify-between"
+      >
+        <div>
+          <div class="w-10 h-10 rounded-2xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4">
+            <BookOpen className="w-5 h-5" />
+          </div>
+          <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-1">
+            Astrophysical Lexicon
+          </span>
+          <h3 class="text-2xl font-bold font-heading text-white group-hover:text-emerald-300 transition-colors">
+            Scientific Glossary & Formulas
+          </h3>
+          <p class="mt-2 text-sm text-slate-400 leading-relaxed font-body">
+            Comprehensive dictionary of astrophysics, cosmological parameters, relativity equations, and astronomical definitions.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-emerald-500/15 flex items-center justify-between text-xs font-mono text-emerald-400 font-semibold">
+          <span>EXPLORE LEXICON</span>
+          <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </a>
+    </div>
+  </section>
+</Layout>

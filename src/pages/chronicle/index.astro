@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getNews } from '../../lib/cosmic-service';
+import { Newspaper, Calendar, ArrowRight, ExternalLink, Flame } from 'lucide-react';
+
+const newsList = await getNews();
+---
+
+<Layout
+  title="The Cosmic Chronicle | Astronomical News & Space Discoveries"
+  description="Verified astronomical discoveries, NASA & ESA space mission updates, and cosmological breakthroughs on The Cosmic Inquiry."
+>
+  <div class="min-h-screen pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="max-w-3xl mb-14">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest text-pink-400 bg-pink-950/40 border border-pink-500/30 mb-3">
+        <Newspaper className="w-3.5 h-3.5" />
+        <span>Astronomical Journalism</span>
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black font-heading text-white tracking-tight">
+        The Cosmic Chronicle
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-slate-300 font-body leading-relaxed">
+        Real-time scientific dispatches, space telescope observations, and institutional research updates from the frontiers of astronomical exploration.
+      </p>
+    </div>
+
+    <!-- Feed Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {newsList.map((item) => (
+        <a
+          href={`/chronicle/${item.slug}`}
+          class="group rounded-3xl overflow-hidden bg-cosmic-900/80 border border-violet-500/20 hover:border-violet-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-violet-950/50 flex flex-col justify-between"
+        >
+          <div class="relative h-56 overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.title}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-cosmic-950 via-transparent to-transparent"></div>
+
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              {item.isBreaking && (
+                <span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-600 text-white font-mono text-[10px] font-bold uppercase tracking-wider animate-pulse">
+                  <Flame className="w-3 h-3" />
+                  Breaking
+                </span>
+              )}
+              <span class="px-2.5 py-1 rounded-full bg-cosmic-950/80 backdrop-blur-md text-[10px] font-mono text-cyan-300">
+                {item.category}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-xs font-mono text-slate-400 mb-2">
+                <Calendar className="w-3.5 h-3.5 text-violet-400" />
+                <span>
+                  {new Date(item.publishedAt).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </span>
+              </div>
+
+              <h2 class="text-lg font-bold font-heading text-white group-hover:text-violet-300 transition-colors line-clamp-2">
+                {item.title}
+              </h2>
+
+              <p class="mt-2 text-xs sm:text-sm text-slate-400 line-clamp-3 font-body">
+                {item.excerpt}
+              </p>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-violet-500/15 flex items-center justify-between text-xs font-mono text-pink-400 font-semibold">
+              <span class="truncate max-w-[180px]">{item.sourceName}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

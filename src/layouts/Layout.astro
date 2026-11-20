@@ -1,0 +1,210 @@
+---
+import StarfieldCanvas from '../components/animations/StarfieldCanvas';
+import CosmicAudio from '../components/animations/CosmicAudio';
+import CosmicSearchModal from '../components/search/CosmicSearchModal';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  canonical?: string;
+}
+
+const {
+  title = "The Cosmic Inquiry | Interactive Astronomy & Cosmic Discovery Platform",
+  description = "A cinematic digital observatory and scientific discovery platform exploring the solar system, black holes, the Big Bang, spacetime, and cosmic mysteries. Created by Albin Thomas.",
+  image = "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+  type = "website",
+  canonical = Astro.url.href
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString() : "https://the-cosmic-inquiry.netlify.app";
+---
+
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content="Albin Thomas" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:site_name" content="The Cosmic Inquiry" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonical} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#02040a" />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "The Cosmic Inquiry",
+      "url": siteUrl,
+      "description": description,
+      "creator": {
+        "@type": "Person",
+        "name": "Albin Thomas"
+      },
+      "educationalUse": "Astronomy, Astrophysics and Cosmology Discovery"
+    })} />
+  </head>
+
+  <body class="bg-[#02040a] text-slate-100 min-h-screen flex flex-col font-body selection:bg-violet-600 selection:text-white">
+    <!-- Starfield Interactive Canvas -->
+    <StarfieldCanvas client:load />
+
+    <!-- Primary Navigation Header -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-cosmic-950/70 border-b border-violet-500/15 transition-all">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <!-- Logo / Brand Identity -->
+        <a href="/" class="flex items-center gap-3.5 group">
+          <div class="relative w-10 h-10 flex items-center justify-center">
+            <!-- Orbital Rings SVG -->
+            <svg class="w-10 h-10 text-violet-400 group-hover:rotate-45 transition-transform duration-700" viewBox="0 0 100 100" fill="none">
+              <ellipse cx="50" cy="50" rx="42" ry="16" transform="rotate(-30 50 50)" stroke="currentColor" stroke-width="2" class="opacity-40" />
+              <ellipse cx="50" cy="50" rx="42" ry="16" transform="rotate(30 50 50)" stroke="#06b6d4" stroke-width="2" class="opacity-40" />
+              <circle cx="50" cy="50" r="10" fill="url(#cosmic-grad)" class="shadow-[0_0_15px_rgba(139,92,246,0.8)]" />
+              <defs>
+                <linearGradient id="cosmic-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#8b5cf6" />
+                  <stop offset="0.6" stop-color="#06b6d4" />
+                  <stop offset="1" stop-color="#ffffff" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <div>
+            <span class="text-base sm:text-lg font-bold tracking-[0.2em] font-heading text-white group-hover:text-violet-300 transition-colors block">
+              THE COSMIC INQUIRY
+            </span>
+            <span class="text-[9px] font-mono tracking-[0.25em] text-cyan-400 uppercase block">
+              Curated by Albin Thomas
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-7 text-xs font-mono font-medium text-slate-300">
+          <a href="/#solar-system" class="hover:text-cyan-300 transition-colors">SOLAR SYSTEM</a>
+          <a href="/#discover" class="hover:text-violet-300 transition-colors">DISCOVER</a>
+          <a href="/chronicle" class="hover:text-pink-300 transition-colors">CHRONICLE</a>
+          <a href="/timeline" class="hover:text-stellar-amber transition-colors">TIMELINE</a>
+          <a href="/glossary" class="hover:text-emerald-300 transition-colors">GLOSSARY</a>
+          <a href="/admin" class="hover:text-purple-300 transition-colors text-violet-400 font-semibold flex items-center gap-1">
+            <span>ADMIN</span>
+          </a>
+        </nav>
+
+        <!-- Right Action Controls -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <CosmicAudio client:load />
+          <CosmicSearchModal client:load />
+
+          <!-- Mobile Menu trigger (links directly to sections) -->
+          <a
+            href="/#discover"
+            class="lg:hidden p-2 rounded-full bg-cosmic-900 border border-violet-500/20 text-slate-300 hover:text-white text-xs font-mono"
+            aria-label="Navigation"
+          >
+            Menu
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Page Content Slot -->
+    <main class="flex-1 relative z-10">
+      <slot />
+    </main>
+
+    <!-- Master Footer -->
+    <footer class="relative z-10 border-t border-violet-500/15 bg-cosmic-950/90 pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+          <!-- Col 1: Brand & Philosophy -->
+          <div class="md:col-span-2 space-y-4">
+            <h3 class="text-xl font-bold font-heading tracking-widest text-white">
+              THE COSMIC INQUIRY
+            </h3>
+            <p className="text-sm font-heading italic text-violet-300">
+              "Explore the Infinite. Question Everything. Understand the Universe."
+            </p>
+            <p class="text-xs text-slate-400 max-w-md leading-relaxed font-body">
+              An advanced digital observatory and interactive scientific knowledge ecosystem dedicated to planetary science, astrophysics, relativistic cosmology, and the unanswered questions of existence.
+            </p>
+            <div class="pt-2 text-xs font-mono text-cyan-400">
+              Platform Creator & Lead Architect: <span class="text-white font-semibold">Albin Thomas</span>
+            </div>
+          </div>
+
+          <!-- Col 2: Exploration Pathways -->
+          <div>
+            <h4 class="text-xs font-mono uppercase tracking-widest text-slate-300 mb-4 font-semibold">
+              Exploration Pathways
+            </h4>
+            <ul class="space-y-2 text-xs font-mono text-slate-400">
+              <li><a href="/explore/black-holes" class="hover:text-violet-300 transition-colors">Black Holes</a></li>
+              <li><a href="/explore/the-big-bang" class="hover:text-violet-300 transition-colors">The Big Bang</a></li>
+              <li><a href="/explore/neutron-stars" class="hover:text-violet-300 transition-colors">Neutron Stars</a></li>
+              <li><a href="/explore/dark-matter" class="hover:text-violet-300 transition-colors">Dark Matter & Energy</a></li>
+              <li><a href="/explore/james-webb-discoveries" class="hover:text-violet-300 transition-colors">James Webb Discoveries</a></li>
+              <li><a href="/explore/the-milky-way" class="hover:text-violet-300 transition-colors">The Milky Way</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Discovery Modules -->
+          <div>
+            <h4 class="text-xs font-mono uppercase tracking-widest text-slate-300 mb-4 font-semibold">
+              Scientific Modules
+            </h4>
+            <ul class="space-y-2 text-xs font-mono text-slate-400">
+              <li><a href="/#solar-system" class="hover:text-cyan-300 transition-colors">3D Solar System</a></li>
+              <li><a href="/chronicle" class="hover:text-pink-300 transition-colors">The Cosmic Chronicle</a></li>
+              <li><a href="/timeline" class="hover:text-stellar-amber transition-colors">Universe Timeline</a></li>
+              <li><a href="/glossary" class="hover:text-emerald-300 transition-colors">Scientific Glossary</a></li>
+              <li><a href="/admin" class="hover:text-violet-400 transition-colors">Control Room (/admin)</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="pt-8 border-t border-violet-500/10 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-slate-500 gap-4">
+          <p>© {new Date().getFullYear()} The Cosmic Inquiry. Engineered by Albin Thomas.</p>
+          <div class="flex items-center gap-6">
+            <span class="flex items-center gap-1.5 text-cyan-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              Netlify Production SSR
+            </span>
+            <span class="flex items-center gap-1.5 text-violet-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
+              Supabase Core Engine
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

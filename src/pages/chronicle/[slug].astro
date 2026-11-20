@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getNewsBySlug, getNews } from '../../lib/cosmic-service';
+import { ArrowLeft, Calendar, ExternalLink, Share2, Newspaper, Flame } from 'lucide-react';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/chronicle');
+}
+
+const article = await getNewsBySlug(slug);
+
+if (!article) {
+  return Astro.redirect('/chronicle');
+}
+
+const allNews = await getNews();
+const otherNews = allNews.filter((n) => n.id !== article.id).slice(0, 3);
+---
+
+<Layout
+  title={`${article.title} | The Cosmic Chronicle`}
+  description={article.excerpt}
+  image={article.image}
+  type="article"
+>
+  <article class="min-h-screen pt-8 pb-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <!-- Breadcrumb -->
+    <div class="mb-8 flex items-center justify-between text-xs font-mono text-slate-400">
+      <a
+        href="/chronicle"
+        class="inline-flex items-center gap-2 hover:text-white transition-colors py-1.5 px-3.5 rounded-full bg-cosmic-900 border border-violet-500/20"
+      >
+        <ArrowLeft className="w-3.5 h-3.5 text-pink-400" />
+        <span>BACK TO CHRONICLE</span>
+      </a>
+
+      <span class="px-3 py-1 rounded-full bg-pink-950/60 border border-pink-500/30 text-pink-300">
+        {article.category}
+      </span>
+    </div>
+
+    <!-- Header -->
+    <header class="space-y-4 mb-8">
+      {article.isBreaking && (
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600/90 text-white font-mono text-xs font-bold uppercase tracking-wider animate-pulse">
+          <Flame className="w-3.5 h-3.5" />
+          Breaking Scientific Discovery
+        </span>
+      )}
+
+      <h1 class="text-3xl sm:text-5xl font-black font-heading text-white tracking-tight leading-tight">
+        {article.title}
+      </h1>
+
+      <p class="text-lg text-slate-300 leading-relaxed font-body">
+        {article.excerpt}
+      </p>
+
+      <div class="py-4 border-y border-violet-500/20 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400">
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1.5">
+            <Calendar className="w-4 h-4 text-violet-400" />
+            {new Date(article.publishedAt).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            })}
+          </span>
+          <span>•</span>
+          <span class="text-cyan-300">Source: {article.sourceName}</span>
+        </div>
+
+        {article.sourceUrl && (
+          <a
+            href={article.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cosmic-850 hover:bg-violet-900/40 border border-violet-500/20 text-cyan-300 hover:text-white transition-all"
+          >
+            <span>Primary Institutional Source</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        )}
+      </div>
+    </header>
+
+    <!-- Cover Media -->
+    <div class="relative rounded-3xl overflow-hidden bg-cosmic-900 border border-violet-500/25 mb-12 shadow-2xl">
+      <img
+        src={article.image}
+        alt={article.title}
+        class="w-full max-h-[500px] object-cover"
+      />
+    </div>
+
+    <!-- Article Content -->
+    <div class="prose prose-invert max-w-none text-slate-200 leading-relaxed text-base sm:text-lg font-body space-y-4 whitespace-pre-line">
+      {article.content}
+    </div>
+
+    <!-- Share & Citation -->
+    <div class="mt-14 pt-8 border-t border-violet-500/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
+      <span>Archived by The Cosmic Inquiry • Architect: Albin Thomas</span>
+      <button
+        onclick="navigator.clipboard.writeText(window.location.href); alert('Copied article link to clipboard!');"
+        class="flex items-center gap-2 px-4 py-2 rounded-full bg-cosmic-900 border border-violet-500/30 hover:border-violet-500/60 text-slate-200 hover:text-white transition-all"
+      >
+        <Share2 className="w-3.5 h-3.5 text-pink-400" />
+        <span>Share Dispatch</span>
+      </button>
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCategoryBySlug, getTopics, getCategories } from '../../lib/cosmic-service';
+import { ArrowLeft, Compass, Clock, ArrowRight, Sparkles } from 'lucide-react';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/#discover');
+}
+
+const category = await getCategoryBySlug(slug);
+
+if (!category) {
+  return Astro.redirect('/#discover');
+}
+
+const categoryTopics = await getTopics(category.slug);
+---
+
+<Layout
+  title={`${category.name} | The Cosmic Inquiry`}
+  description={category.description}
+  image={category.coverImage}
+>
+  <div class="min-h-screen pt-8 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <!-- Back Navigation -->
+    <div class="mb-8">
+      <a
+        href="/#discover"
+        class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-white transition-colors py-1.5 px-3.5 rounded-full bg-cosmic-900 border border-violet-500/20"
+      >
+        <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" />
+        <span>BACK TO ALL DOMAINS</span>
+      </a>
+    </div>
+
+    <!-- Category Hero Header Banner -->
+    <div class="relative rounded-3xl overflow-hidden bg-cosmic-900 border border-violet-500/25 mb-14 shadow-2xl">
+      <div class="relative h-64 sm:h-80 md:h-96 overflow-hidden">
+        <img
+          src={category.coverImage}
+          alt={category.name}
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-cosmic-950 via-cosmic-950/70 to-transparent"></div>
+
+        <div class="absolute bottom-6 left-6 right-6 sm:bottom-10 sm:left-10 sm:right-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest text-cyan-300 bg-cosmic-950/80 border border-cyan-500/30 backdrop-blur-md mb-3">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Research Category</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-black font-heading text-white tracking-tight">
+            {category.name}
+          </h1>
+
+          <p class="mt-3 text-sm sm:text-base text-slate-300 max-w-2xl font-body leading-relaxed">
+            {category.description}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Topics Grid for this category -->
+    <div class="mb-10 flex items-center justify-between">
+      <h2 class="text-xl sm:text-2xl font-bold font-heading text-white">
+        Published Explorations in {category.name}
+      </h2>
+      <span class="text-xs font-mono text-slate-400">
+        {categoryTopics.length} Inquiries Available
+      </span>
+    </div>
+
+    {categoryTopics.length === 0 ? (
+      <div class="text-center py-16 p-8 rounded-3xl bg-cosmic-900/40 border border-violet-500/20">
+        <p class="text-slate-300 font-heading text-lg">No topics published in this category yet.</p>
+        <p class="text-xs text-slate-500 font-mono mt-2">Check back soon or add one via the Admin Control Room.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {categoryTopics.map((t) => (
+          <a
+            href={`/explore/${t.slug}`}
+            class="group rounded-3xl overflow-hidden bg-cosmic-900/80 border border-violet-500/20 hover:border-violet-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-violet-950/50 flex flex-col justify-between"
+          >
+            <div class="relative h-48 overflow-hidden">
+              <img
+                src={t.coverImage}
+                alt={t.title}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-cosmic-950 via-transparent to-transparent"></div>
+              <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-cosmic-950/80 backdrop-blur-md text-[10px] font-mono text-cyan-300">
+                {t.readingTime}
+              </div>
+            </div>
+
+            <div class="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-bold font-heading text-white group-hover:text-violet-300 transition-colors line-clamp-2">
+                  {t.title}
+                </h3>
+                <p class="mt-2 text-xs sm:text-sm text-slate-400 line-clamp-3 font-body">
+                  {t.excerpt}
+                </p>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-violet-500/15 flex items-center justify-between text-xs font-mono text-cyan-400 font-semibold">
+                <span>READ INQUIRY</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>
