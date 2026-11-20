@@ -109,3 +109,30 @@ export interface MediaItem {
   caption: string;
   createdAt: string;
 }
+
+export interface SiteConfig {
+  siteName: string;
+  tagline: string;
+  creatorName: string;
+  creatorSubtitle: string;
+  heroBadge: string;
+  heroHeadingLine1: string;
+  heroHeadingLine2: string;
+  heroDescription: string;
+  heroCtaPrimary: string;
+  heroCtaSecondary: string;
+  solarSystemTitle: string;
+  solarSystemDescription: string;
+  domainsTitle: string;
+  domainsDescription: string;
+  chronicleTitle: string;
+  chronicleDescription: string;
+  timelineTitle: string;
+  timelineDescription: string;
+  glossaryTitle: string;
+  glossaryDescription: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+  ogImage: string;
+}

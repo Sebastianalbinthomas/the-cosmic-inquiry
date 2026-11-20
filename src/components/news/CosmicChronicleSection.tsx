@@ -19,10 +19,10 @@ export default function CosmicChronicleSection({ news }: CosmicChronicleSectionP
             <Newspaper className="w-3.5 h-3.5" />
             <span>The Cosmic Chronicle</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold font-heading text-white tracking-tight">
+          <h2 className="chronicle-title-text text-3xl sm:text-5xl font-bold font-heading text-white tracking-tight">
             Latest Astronomical Discoveries
           </h2>
-          <p className="mt-3 text-base text-slate-300 max-w-2xl font-body">
+          <p className="chronicle-desc-text mt-3 text-base text-slate-300 max-w-2xl font-body">
             Peer-reviewed discoveries, space agency mission milestones, and observational updates from NASA, ESA, and international astronomical arrays.
           </p>
         </div>

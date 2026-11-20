@@ -4,20 +4,23 @@ import {
   COSMIC_NEWS,
   SOLAR_SYSTEM_PLANETS,
   TIMELINE_ERAS,
-  GLOSSARY_TERMS
+  GLOSSARY_TERMS,
+  DEFAULT_SITE_CONFIG
 } from './cosmic-data';
-import type { Category, Topic, NewsItem, Planet, GlossaryItem, TimelineEra } from './types';
+import type { Category, Topic, NewsItem, Planet, GlossaryItem, TimelineEra, SiteConfig } from './types';
 
 // In-memory / dynamic store for demo, SSR, and client edits
 let dynamicTopics: Topic[] = [...COSMIC_TOPICS];
 let dynamicCategories: Category[] = [...COSMIC_CATEGORIES];
 let dynamicNews: NewsItem[] = [...COSMIC_NEWS];
+let dynamicSiteConfig: SiteConfig = { ...DEFAULT_SITE_CONFIG };
 
 // Browser LocalStorage persistence helpers for autonomous client edits
 const STORAGE_KEYS = {
   TOPICS: 'cosmic_inquiry_topics',
   NEWS: 'cosmic_inquiry_news',
-  CATEGORIES: 'cosmic_inquiry_categories'
+  CATEGORIES: 'cosmic_inquiry_categories',
+  SITE_CONFIG: 'cosmic_inquiry_site_config'
 };
 
 function initBrowserState() {
@@ -35,6 +38,10 @@ function initBrowserState() {
       if (storedCats) {
         dynamicCategories = JSON.parse(storedCats);
       }
+      const storedConfig = localStorage.getItem(STORAGE_KEYS.SITE_CONFIG);
+      if (storedConfig) {
+        dynamicSiteConfig = { ...DEFAULT_SITE_CONFIG, ...JSON.parse(storedConfig) };
+      }
     } catch (e) {
       console.warn('LocalStorage load skipped', e);
     }
@@ -50,6 +57,8 @@ function syncBrowserStorage() {
       localStorage.setItem(STORAGE_KEYS.TOPICS, JSON.stringify(dynamicTopics));
       localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(dynamicNews));
       localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(dynamicCategories));
+      localStorage.setItem(STORAGE_KEYS.SITE_CONFIG, JSON.stringify(dynamicSiteConfig));
+      window.dispatchEvent(new CustomEvent('cosmic-config-updated', { detail: dynamicSiteConfig }));
     } catch (e) {
       console.warn('LocalStorage save skipped', e);
     }
@@ -269,4 +278,25 @@ export async function getAdminStats() {
     totalNews: allNews.length,
     totalViews
   };
+}
+
+export function getSiteConfig(): SiteConfig {
+  initBrowserState();
+  return dynamicSiteConfig;
+}
+
+export function updateSiteConfig(updates: Partial<SiteConfig>): SiteConfig {
+  initBrowserState();
+  dynamicSiteConfig = {
+    ...dynamicSiteConfig,
+    ...updates
+  };
+  syncBrowserStorage();
+  return dynamicSiteConfig;
+}
+
+export function resetSiteConfig(): SiteConfig {
+  dynamicSiteConfig = { ...DEFAULT_SITE_CONFIG };
+  syncBrowserStorage();
+  return dynamicSiteConfig;
 }

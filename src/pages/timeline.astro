@@ -1,14 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getTimelineEras } from '../lib/cosmic-service';
+import { getTimelineEras, getSiteConfig } from '../lib/cosmic-service';
 import { Clock, Sparkles, Orbit, Flame, CheckCircle, ArrowDown } from 'lucide-react';
 
 const eras = getTimelineEras();
+const config = getSiteConfig();
 ---
 
 <Layout
-  title="Interactive Universe Timeline | The Cosmic Inquiry"
-  description="Traverse 13.8 billion years of cosmic history from the quantum Planck epoch to primordial nucleosynthesis, star formation, and the deep future."
+  title={`${config.timelineTitle} | ${config.siteName}`}
+  description={config.timelineDescription}
 >
   <div class="min-h-screen pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
     <!-- Header -->
@@ -17,11 +18,11 @@ const eras = getTimelineEras();
         <Clock className="w-3.5 h-3.5" />
         <span>Universal Chronology</span>
       </div>
-      <h1 class="text-4xl sm:text-6xl font-black font-heading text-white tracking-tight">
-        The Universe Timeline
+      <h1 class="timeline-title-text text-4xl sm:text-6xl font-black font-heading text-white tracking-tight">
+        {config.timelineTitle}
       </h1>
-      <p class="mt-4 text-base sm:text-lg text-slate-300 font-body leading-relaxed">
-        13.787 billion years of spacetime expansion, matter condensation, and stellar evolution traced from $t = 0$ to the cosmic horizon.
+      <p class="timeline-desc-text mt-4 text-base sm:text-lg text-slate-300 font-body leading-relaxed">
+        {config.timelineDescription}
       </p>
     </div>
 

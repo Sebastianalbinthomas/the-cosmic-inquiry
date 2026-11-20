@@ -16,10 +16,10 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
             <Sparkles className="w-3.5 h-3.5" />
             <span>Discover The Cosmos</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold font-heading text-white tracking-tight">
+          <h2 className="domains-title-text text-3xl sm:text-5xl font-bold font-heading text-white tracking-tight">
             Curated Cosmic Domains
           </h2>
-          <p className="mt-3 text-base text-slate-300 max-w-2xl font-body">
+          <p className="domains-desc-text mt-3 text-base text-slate-300 max-w-2xl font-body">
             Explore 12 foundational scientific disciplines spanning planetary geology, stellar physics, relativistic spacetime, and quantum cosmology.
           </p>
         </div>

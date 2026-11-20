@@ -2,7 +2,10 @@
 import StarfieldCanvas from '../components/animations/StarfieldCanvas';
 import CosmicAudio from '../components/animations/CosmicAudio';
 import CosmicSearchModal from '../components/search/CosmicSearchModal';
+import { getSiteConfig } from '../lib/cosmic-service';
 import '../styles/global.css';
+
+const siteConfig = getSiteConfig();
 
 interface Props {
   title?: string;
@@ -13,9 +16,9 @@ interface Props {
 }
 
 const {
-  title = "The Cosmic Inquiry | Interactive Astronomy & Cosmic Discovery Platform",
-  description = "A cinematic digital observatory and scientific discovery platform exploring the solar system, black holes, the Big Bang, spacetime, and cosmic mysteries. Created by Albin Thomas.",
-  image = "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+  title = siteConfig.metaTitle || "The Cosmic Inquiry | Interactive Astronomy & Cosmic Discovery Platform",
+  description = siteConfig.metaDescription || "A cinematic digital observatory and scientific discovery platform exploring the solar system, black holes, the Big Bang, spacetime, and cosmic mysteries. Created by Albin Thomas.",
+  image = siteConfig.ogImage || "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
   type = "website",
   canonical = Astro.url.href
 } = Astro.props;
@@ -97,11 +100,11 @@ const siteUrl = Astro.site ? Astro.site.toString() : "https://the-cosmic-inquiry
           </div>
 
           <div>
-            <span class="text-base sm:text-lg font-bold tracking-[0.2em] font-heading text-white group-hover:text-violet-300 transition-colors block">
-              THE COSMIC INQUIRY
+            <span class="site-name-text text-base sm:text-lg font-bold tracking-[0.2em] font-heading text-white group-hover:text-violet-300 transition-colors block">
+              {siteConfig.siteName}
             </span>
-            <span class="text-[9px] font-mono tracking-[0.25em] text-cyan-400 uppercase block">
-              Curated by Albin Thomas
+            <span class="creator-subtitle-text text-[9px] font-mono tracking-[0.25em] text-cyan-400 uppercase block">
+              {siteConfig.creatorSubtitle}
             </span>
           </div>
         </a>
@@ -205,17 +208,17 @@ const siteUrl = Astro.site ? Astro.site.toString() : "https://the-cosmic-inquiry
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           <!-- Col 1: Brand & Philosophy -->
           <div class="md:col-span-2 space-y-4">
-            <h3 class="text-xl font-bold font-heading tracking-widest text-white">
-              THE COSMIC INQUIRY
+            <h3 class="site-name-text text-xl font-bold font-heading tracking-widest text-white">
+              {siteConfig.siteName}
             </h3>
-            <p className="text-sm font-heading italic text-violet-300">
-              "Explore the Infinite. Question Everything. Understand the Universe."
+            <p class="site-tagline-text text-sm font-heading italic text-violet-300">
+              "{siteConfig.tagline}"
             </p>
             <p class="text-xs text-slate-400 max-w-md leading-relaxed font-body">
               An advanced digital observatory and interactive scientific knowledge ecosystem dedicated to planetary science, astrophysics, relativistic cosmology, and the unanswered questions of existence.
             </p>
             <div class="pt-2 text-xs font-mono text-cyan-400">
-              Platform Creator & Lead Architect: <span class="text-white font-semibold">Albin Thomas</span>
+              Platform Creator & Lead Architect: <span class="creator-name-text text-white font-semibold">{siteConfig.creatorName}</span>
             </div>
           </div>
 
@@ -299,6 +302,68 @@ const siteUrl = Astro.site ? Astro.site.toString() : "https://the-cosmic-inquiry
           });
         });
       }
+
+      // Live Reactive Website Configuration Synchronizer
+      function applyLiveCosmicConfig() {
+        try {
+          const raw = localStorage.getItem('cosmic_inquiry_site_config');
+          if (!raw) return;
+          const cfg = JSON.parse(raw);
+          if (cfg.siteName) {
+            document.querySelectorAll('.site-name-text').forEach((el) => { el.textContent = cfg.siteName; });
+          }
+          if (cfg.tagline) {
+            document.querySelectorAll('.site-tagline-text').forEach((el) => { el.textContent = `"${cfg.tagline}"`; });
+          }
+          if (cfg.creatorName) {
+            document.querySelectorAll('.creator-name-text').forEach((el) => { el.textContent = cfg.creatorName; });
+          }
+          if (cfg.creatorSubtitle) {
+            document.querySelectorAll('.creator-subtitle-text').forEach((el) => { el.textContent = cfg.creatorSubtitle; });
+          }
+          if (cfg.heroBadge) {
+            document.querySelectorAll('.hero-badge-text').forEach((el) => { el.textContent = cfg.heroBadge; });
+          }
+          if (cfg.heroHeadingLine1) {
+            document.querySelectorAll('.hero-heading-1').forEach((el) => { el.textContent = cfg.heroHeadingLine1; });
+          }
+          if (cfg.heroHeadingLine2) {
+            document.querySelectorAll('.hero-heading-2').forEach((el) => { el.textContent = cfg.heroHeadingLine2; });
+          }
+          if (cfg.heroDescription) {
+            document.querySelectorAll('.hero-desc-text').forEach((el) => { el.textContent = `"${cfg.heroDescription}"`; });
+          }
+          if (cfg.heroCtaPrimary) {
+            document.querySelectorAll('.hero-cta-primary-text').forEach((el) => { el.textContent = cfg.heroCtaPrimary; });
+          }
+          if (cfg.heroCtaSecondary) {
+            document.querySelectorAll('.hero-cta-secondary-text').forEach((el) => { el.textContent = cfg.heroCtaSecondary; });
+          }
+          if (cfg.solarSystemTitle) {
+            document.querySelectorAll('.solar-system-title-text').forEach((el) => { el.textContent = cfg.solarSystemTitle; });
+          }
+          if (cfg.solarSystemDescription) {
+            document.querySelectorAll('.solar-system-desc-text').forEach((el) => { el.textContent = cfg.solarSystemDescription; });
+          }
+          if (cfg.domainsTitle) {
+            document.querySelectorAll('.domains-title-text').forEach((el) => { el.textContent = cfg.domainsTitle; });
+          }
+          if (cfg.domainsDescription) {
+            document.querySelectorAll('.domains-desc-text').forEach((el) => { el.textContent = cfg.domainsDescription; });
+          }
+          if (cfg.chronicleTitle) {
+            document.querySelectorAll('.chronicle-title-text').forEach((el) => { el.textContent = cfg.chronicleTitle; });
+          }
+          if (cfg.chronicleDescription) {
+            document.querySelectorAll('.chronicle-desc-text').forEach((el) => { el.textContent = cfg.chronicleDescription; });
+          }
+        } catch (e) {
+          console.warn('Live config sync error', e);
+        }
+      }
+
+      applyLiveCosmicConfig();
+      window.addEventListener('cosmic-config-updated', applyLiveCosmicConfig);
     </script>
   </body>
 </html>

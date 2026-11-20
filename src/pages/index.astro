@@ -6,18 +6,18 @@ import CosmicJourney from '../components/animations/CosmicJourney';
 import CategoryGrid from '../components/topics/CategoryGrid';
 import CosmicChronicleSection from '../components/news/CosmicChronicleSection';
 import TrendingTopicsSection from '../components/topics/TrendingTopicsSection';
-import { getCategories, getTopics, getNews } from '../lib/cosmic-service';
-import { CREATOR_NAME } from '../lib/cosmic-data';
+import { getCategories, getTopics, getNews, getSiteConfig } from '../lib/cosmic-service';
 import { ArrowDown, Sparkles, Orbit, Compass, Clock, BookOpen } from 'lucide-react';
 
 const categories = await getCategories();
 const topics = await getTopics();
 const news = await getNews();
+const config = getSiteConfig();
 ---
 
 <Layout
-  title="The Cosmic Inquiry | Beyond Everything We Know"
-  description="Explore the universe through an advanced digital observatory. Interactive 3D solar system, astrophysics discoveries, black holes, the Big Bang, and cosmology curated by Albin Thomas."
+  title={`${config.siteName} | ${config.heroHeadingLine1} ${config.heroHeadingLine2}`}
+  description={config.metaDescription}
 >
   <!-- 3.1 Initial Splash Screen Animation -->
   <CosmicSplashScreen client:load />
@@ -32,20 +32,20 @@ const news = await getNews();
     <!-- Editorial Creator Attribution Badge -->
     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-[0.2em] text-cyan-300 bg-cosmic-900/80 border border-cyan-500/30 backdrop-blur-md mb-6 shadow-lg shadow-cyan-950/50">
       <Sparkles className="w-3.5 h-3.5 text-stellar-gold animate-spin-slow" />
-      <span>Scientific Observatory • Architect: {CREATOR_NAME}</span>
+      <span class="hero-badge-text">{config.heroBadge}</span>
     </div>
 
     <!-- Hero Heading per Part 3.2 -->
     <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight text-white max-w-5xl leading-none">
-      BEYOND EVERYTHING <br />
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-300 to-white">
-        WE KNOW.
+      <span class="hero-heading-1">{config.heroHeadingLine1}</span> <br />
+      <span class="hero-heading-2 text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-300 to-white">
+        {config.heroHeadingLine2}
       </span>
     </h1>
 
     <!-- Supporting Text per Part 3.2 -->
-    <p class="mt-6 text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl font-body leading-relaxed">
-      "Journey through space, time, matter and existence. Discover the extraordinary phenomena that shape our universe and explore the mysteries that remain beyond our understanding."
+    <p class="hero-desc-text mt-6 text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl font-body leading-relaxed">
+      "{config.heroDescription}"
     </p>
 
     <!-- Primary Action Buttons -->
@@ -54,14 +54,14 @@ const news = await getNews();
         href="#solar-system"
         class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-all shadow-xl shadow-violet-600/30 hover:scale-105"
       >
-        EXPLORE THE UNIVERSE
+        <span class="hero-cta-primary-text">{config.heroCtaPrimary}</span>
       </a>
 
       <a
         href="#chronicle"
         class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-cosmic-900/80 hover:bg-cosmic-800 border border-violet-500/30 hover:border-violet-500/60 text-slate-200 hover:text-white font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-all backdrop-blur-md"
       >
-        DISCOVER THE LATEST
+        <span class="hero-cta-secondary-text">{config.heroCtaSecondary}</span>
       </a>
     </div>
 
@@ -81,11 +81,11 @@ const news = await getNews();
         <Orbit className="w-3.5 h-3.5" />
         <span>3D Orbital Simulator</span>
       </div>
-      <h2 class="text-3xl sm:text-5xl font-bold font-heading text-white">
-        The Solar System
+      <h2 class="solar-system-title-text text-3xl sm:text-5xl font-bold font-heading text-white">
+        {config.solarSystemTitle}
       </h2>
-      <p class="mt-3 text-slate-400 text-sm sm:text-base font-body">
-        Rotate, zoom, and interact with the planetary architecture. Click any celestial body to inspect its physical parameters and launch dedicated exploration pages.
+      <p class="solar-system-desc-text mt-3 text-slate-400 text-sm sm:text-base font-body">
+        {config.solarSystemDescription}
       </p>
     </div>
 

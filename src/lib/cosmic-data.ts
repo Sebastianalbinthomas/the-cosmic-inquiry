@@ -1,8 +1,35 @@
-import type { Category, Topic, NewsItem, Planet, GlossaryItem, TimelineEra } from './types';
+import type { Category, Topic, NewsItem, Planet, GlossaryItem, TimelineEra, SiteConfig } from './types';
 
-export const CREATOR_NAME = "Albin Thomas";
-export const SITE_TITLE = "The Cosmic Inquiry";
-export const SITE_TAGLINE = "Explore the Infinite. Question Everything. Understand the Universe.";
+export const DEFAULT_SITE_CONFIG: SiteConfig = {
+  siteName: "The Cosmic Inquiry",
+  tagline: "Explore the Infinite. Question Everything. Understand the Universe.",
+  creatorName: "Albin Thomas",
+  creatorSubtitle: "Curated by Albin Thomas",
+  heroBadge: "Scientific Observatory • Architect: Albin Thomas",
+  heroHeadingLine1: "BEYOND EVERYTHING",
+  heroHeadingLine2: "WE KNOW.",
+  heroDescription: "Journey through space, time, matter and existence. Discover the extraordinary phenomena that shape our universe and explore the mysteries that remain beyond our understanding.",
+  heroCtaPrimary: "EXPLORE THE UNIVERSE",
+  heroCtaSecondary: "DISCOVER THE LATEST",
+  solarSystemTitle: "The Interactive Solar System",
+  solarSystemDescription: "Explore our cosmic backyard in real-time 3D. Inspect planetary orbits, atmospheric compositions, and physical characteristics.",
+  domainsTitle: "Curated Cosmic Domains",
+  domainsDescription: "Explore 12 foundational scientific disciplines spanning planetary geology, stellar physics, relativistic spacetime, and quantum cosmology.",
+  chronicleTitle: "Latest Astronomical Discoveries",
+  chronicleDescription: "Peer-reviewed discoveries, space agency mission milestones, and observational updates from NASA, ESA, and international astronomical arrays.",
+  timelineTitle: "The Universe Timeline",
+  timelineDescription: "13.787 billion years of spacetime expansion, matter condensation, and stellar evolution traced from t = 0 to the cosmic horizon.",
+  glossaryTitle: "Cosmic Scientific Glossary",
+  glossaryDescription: "An authoritative astronomical lexicon defining core concepts in astrophysics, general relativity, quantum cosmology, and observational planetary science.",
+  metaTitle: "The Cosmic Inquiry | Interactive Astronomy & Cosmic Discovery Platform",
+  metaDescription: "A cinematic digital observatory and scientific discovery platform exploring the solar system, black holes, the Big Bang, spacetime, and cosmic mysteries. Created by Albin Thomas.",
+  metaKeywords: "astronomy, astrophysics, cosmology, black holes, solar system, james webb, albin thomas, cosmic inquiry",
+  ogImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80"
+};
+
+export const CREATOR_NAME = DEFAULT_SITE_CONFIG.creatorName;
+export const SITE_TITLE = DEFAULT_SITE_CONFIG.siteName;
+export const SITE_TAGLINE = DEFAULT_SITE_CONFIG.tagline;
 
 export const COSMIC_CATEGORIES: Category[] = [
   {

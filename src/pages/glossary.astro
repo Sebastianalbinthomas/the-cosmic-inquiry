@@ -1,14 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getGlossaryTerms } from '../lib/cosmic-service';
+import { getGlossaryTerms, getSiteConfig } from '../lib/cosmic-service';
 import { BookOpen, Sparkles, Search } from 'lucide-react';
 
 const terms = getGlossaryTerms();
+const config = getSiteConfig();
 ---
 
 <Layout
-  title="Scientific Glossary & Astrophysics Lexicon | The Cosmic Inquiry"
-  description="A searchable dictionary of astronomy, relativity, stellar physics, and cosmological terminology curated by Albin Thomas."
+  title={`${config.glossaryTitle} | ${config.siteName}`}
+  description={config.glossaryDescription}
 >
   <div class="min-h-screen pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
     <!-- Header -->
@@ -17,11 +18,11 @@ const terms = getGlossaryTerms();
         <BookOpen className="w-3.5 h-3.5" />
         <span>Astrophysics Lexicon</span>
       </div>
-      <h1 class="text-4xl sm:text-6xl font-black font-heading text-white tracking-tight">
-        Scientific Glossary
+      <h1 class="glossary-title-text text-4xl sm:text-6xl font-black font-heading text-white tracking-tight">
+        {config.glossaryTitle}
       </h1>
-      <p class="mt-4 text-base sm:text-lg text-slate-300 font-body leading-relaxed">
-        Key terminology, relativistic formulas, and foundational concepts defining modern astronomy and theoretical physics.
+      <p class="glossary-desc-text mt-4 text-base sm:text-lg text-slate-300 font-body leading-relaxed">
+        {config.glossaryDescription}
       </p>
     </div>
 
