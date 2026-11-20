@@ -26,7 +26,11 @@ import {
   Download,
   Copy,
   Check,
-  Send
+  Send,
+  Lock,
+  EyeOff,
+  ShieldAlert,
+  User
 } from 'lucide-react';
 import {
   getAllTopicsAdmin,
@@ -46,6 +50,23 @@ import type { Topic, Category, NewsItem, SiteConfig } from '../../lib/types';
 import { DEFAULT_SITE_CONFIG } from '../../lib/cosmic-data';
 
 export default function AdminDashboard() {
+  // Authentication & Security Gate
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loginId, setLoginId] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isAuth = sessionStorage.getItem('cosmic_admin_auth') === 'true';
+      if (isAuth) {
+        setIsAuthenticated(true);
+      }
+    }
+  }, []);
+
   const [activeTab, setActiveTab] = useState<'overview' | 'topics' | 'categories' | 'news' | 'media' | 'settings'>('overview');
   const [settingsSection, setSettingsSection] = useState<'identity' | 'hero' | 'sections' | 'seo' | 'export'>('identity');
   const [siteConfig, setSiteConfig] = useState<SiteConfig>(getSiteConfig());
@@ -191,6 +212,161 @@ export default function AdminDashboard() {
     }
   };
 
+  // Handle Authentication Login
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAuthenticating(true);
+    setLoginError(null);
+
+    setTimeout(() => {
+      if (loginId.trim().toLowerCase() === 'admin' && loginPassword === 'Admin@Cosmos') {
+        setIsAuthenticated(true);
+        setIsAuthenticating(false);
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('cosmic_admin_auth', 'true');
+        }
+        showNotification('Security clearance verified. Welcome to Command Center.');
+      } else {
+        setIsAuthenticating(false);
+        setLoginError('Invalid Administrator ID or Security Passkey. Access Denied.');
+      }
+    }, 350);
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setLoginId('');
+    setLoginPassword('');
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('cosmic_admin_auth');
+    }
+    showNotification('Locked and signed out of Control Room.');
+  };
+
+  // -------------------------------------------------------------
+  // RENDER LOGIN LOCK SCREEN IF NOT AUTHENTICATED
+  // -------------------------------------------------------------
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#040711] text-slate-200 flex flex-col items-center justify-center p-4 sm:p-6 font-body relative overflow-hidden">
+        {/* Background Ambient Glows */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-gradient-to-tr from-violet-600/15 via-cyan-500/10 to-amber-500/5 blur-[120px] rounded-full"></div>
+        </div>
+
+        {/* Login Security Modal Card */}
+        <div className="w-full max-w-md relative z-10 p-8 sm:p-10 rounded-3xl bg-[#090e1e]/90 backdrop-blur-2xl border border-violet-500/30 shadow-2xl shadow-violet-950/60 animate-fade-in">
+          {/* Header Shield & Orbital Icon */}
+          <div className="text-center space-y-3 mb-8">
+            <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-violet-600 to-cyan-500 p-[1px] flex items-center justify-center shadow-lg shadow-violet-600/40">
+              <div className="w-full h-full bg-[#070b16] rounded-2xl flex items-center justify-center">
+                <Lock className="w-7 h-7 text-cyan-400 animate-pulse" />
+              </div>
+            </div>
+
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-[0.2em] text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 mb-2">
+                <ShieldAlert className="w-3 h-3 text-stellar-gold" />
+                <span>Restricted Command Zone</span>
+              </div>
+              <h1 className="text-2xl font-black font-heading text-white tracking-wider">
+                CONTROL ROOM
+              </h1>
+              <p className="text-xs font-mono text-slate-400 mt-1">
+                Security clearance required to access system settings
+              </p>
+            </div>
+          </div>
+
+          {/* Error Notice */}
+          {loginError && (
+            <div className="mb-6 p-3.5 rounded-xl bg-red-950/60 border border-red-500/40 text-red-200 text-xs font-mono flex items-center gap-2.5 animate-shake">
+              <ShieldAlert className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          {/* Authentication Form */}
+          <form onSubmit={handleLogin} className="space-y-5 text-xs font-mono">
+            <div>
+              <label className="text-slate-300 block mb-1.5 font-semibold flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-cyan-400" />
+                <span>ADMINISTRATOR ID</span>
+              </label>
+              <input
+                type="text"
+                required
+                autoFocus
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                placeholder="Enter ID"
+                className="w-full p-3 rounded-xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label className="text-slate-300 block mb-1.5 font-semibold flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-violet-400" />
+                <span>SECURITY PASSKEY</span>
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  placeholder="Enter Password"
+                  className="w-full p-3 pr-10 rounded-xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-violet-400 transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isAuthenticating}
+              className="w-full mt-2 py-3.5 px-4 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white font-mono text-xs font-bold uppercase tracking-widest shadow-xl shadow-violet-600/30 transition-all hover:scale-[1.02] flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {isAuthenticating ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-cyan-300" />
+                  <span>Verifying Credentials...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 text-stellar-gold" />
+                  <span>AUTHENTICATE & ENTER</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Return link */}
+          <div className="mt-8 pt-6 border-t border-slate-800 text-center">
+            <a
+              href="/"
+              className="text-xs font-mono text-slate-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1.5"
+            >
+              <span>&larr; Return to Public Observatory</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // RENDER AUTHENTICATED COMMAND CENTER
+  // -------------------------------------------------------------
+
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-200 flex flex-col md:flex-row font-body">
       {/* Toast Notification */}
@@ -324,6 +500,16 @@ export default function AdminDashboard() {
             <ExternalLink className="w-3.5 h-3.5" />
             <span>Open Live Website</span>
           </a>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-red-950/40 hover:bg-red-900/60 border border-red-500/25 text-xs font-mono text-red-300 hover:text-white transition-all"
+            title="Lock session and sign out"
+          >
+            <LogOut className="w-3.5 h-3.5 text-red-400" />
+            <span>Lock & Sign Out</span>
+          </button>
         </div>
       </aside>
 
