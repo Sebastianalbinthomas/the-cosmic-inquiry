@@ -32,7 +32,7 @@ export default function TrendingTopicsSection({ topics }: TrendingTopicsSectionP
           >
             <div>
               <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-3">
-                <span className="text-violet-400 font-semibold">#{idx + 1} TRENDING</span>
+                <span className="text-violet-400 font-semibold">TOPIC 0{idx + 1} • TRENDING</span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {t.readingTime}

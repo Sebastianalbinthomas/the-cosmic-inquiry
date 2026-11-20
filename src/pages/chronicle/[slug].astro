@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getNewsBySlug, getNews } from '../../lib/cosmic-service';
+import { formatCosmicContent } from '../../lib/format-content';
 import { ArrowLeft, Calendar, ExternalLink, Share2, Newspaper, Flame } from 'lucide-react';
 
 const { slug } = Astro.params;
@@ -95,9 +96,9 @@ const otherNews = allNews.filter((n) => n.id !== article.id).slice(0, 3);
       />
     </div>
 
-    <!-- Article Content -->
-    <div class="prose prose-invert max-w-none text-slate-200 leading-relaxed text-base sm:text-lg font-body space-y-4 whitespace-pre-line">
-      {article.content}
+    <!-- Article Content formatted cleanly without raw markdown artifacts -->
+    <div class="space-y-4 text-slate-200 leading-relaxed text-base sm:text-lg font-body">
+      <div set:html={formatCosmicContent(article.content)} />
     </div>
 
     <!-- Share & Citation -->

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getTopicBySlug, getTopics, getCategories } from '../../lib/cosmic-service';
+import { formatCosmicContent } from '../../lib/format-content';
 import { ArrowLeft, Share2, Clock, Calendar, User, BookOpen, ExternalLink, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const { slug } = Astro.params;
@@ -121,11 +122,9 @@ const relatedTopics = allTopics
       </div>
     )}
 
-    <!-- Main Content Area -->
-    <div class="prose prose-invert prose-violet max-w-none space-y-6 text-slate-200 leading-relaxed font-body text-base sm:text-lg">
-      <div class="whitespace-pre-line leading-relaxed space-y-4">
-        {topic.content}
-      </div>
+    <!-- Main Content Area with rich formatting (no raw markdown # or * artifacts) -->
+    <div class="space-y-4 text-slate-200 leading-relaxed font-body text-base sm:text-lg">
+      <div set:html={formatCosmicContent(topic.content)} />
     </div>
 
     <!-- Embedded Video Player if present -->

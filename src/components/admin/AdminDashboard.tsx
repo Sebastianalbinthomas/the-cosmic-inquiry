@@ -31,7 +31,6 @@ import {
   deleteNews,
   getAdminStats
 } from '../../lib/cosmic-service';
-import { isSupabaseConfigured, supabase } from '../../lib/supabase';
 import type { Topic, Category, NewsItem } from '../../lib/types';
 import { CREATOR_NAME } from '../../lib/cosmic-data';
 
@@ -261,13 +260,9 @@ export default function AdminDashboard() {
             <span className="text-slate-400 block">Lead Architect</span>
             <span className="text-white font-bold">{CREATOR_NAME}</span>
             <div className="flex items-center gap-1.5 pt-1">
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  isSupabaseConfigured ? 'bg-emerald-400' : 'bg-cyan-400'
-                }`}
-              />
-              <span className="text-[10px] text-slate-400">
-                {isSupabaseConfigured ? 'Supabase Live' : 'Autonomous Engine'}
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-[10px] text-cyan-300 font-semibold">
+                GitHub & Netlify Native
               </span>
             </div>
           </div>

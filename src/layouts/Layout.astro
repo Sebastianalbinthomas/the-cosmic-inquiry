@@ -123,15 +123,74 @@ const siteUrl = Astro.site ? Astro.site.toString() : "https://the-cosmic-inquiry
           <CosmicAudio client:load />
           <CosmicSearchModal client:load />
 
-          <!-- Mobile Menu trigger (links directly to sections) -->
+          <!-- Mobile Menu Trigger -->
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            class="lg:hidden p-2.5 rounded-xl bg-cosmic-900 border border-violet-500/25 text-slate-300 hover:text-white hover:border-violet-400 text-xs font-mono transition-all flex items-center gap-1.5"
+            aria-label="Toggle Navigation Menu"
+            aria-expanded="false"
+          >
+            <svg id="hamburger-icon" class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="close-icon" class="w-4 h-4 text-cyan-400 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span class="sr-only">Menu</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div
+        id="mobile-menu-drawer"
+        class="hidden lg:hidden border-b border-violet-500/20 bg-cosmic-950/95 backdrop-blur-2xl px-6 py-6 transition-all animate-fade-in"
+      >
+        <nav class="flex flex-col space-y-4 text-sm font-mono">
+          <a
+            href="/#solar-system"
+            class="mobile-nav-link flex items-center justify-between py-2.5 border-b border-violet-500/10 text-slate-200 hover:text-cyan-300 transition-colors"
+          >
+            <span>🪐 3D SOLAR SYSTEM</span>
+            <span class="text-xs text-cyan-400">&rarr;</span>
+          </a>
           <a
             href="/#discover"
-            class="lg:hidden p-2 rounded-full bg-cosmic-900 border border-violet-500/20 text-slate-300 hover:text-white text-xs font-mono"
-            aria-label="Navigation"
+            class="mobile-nav-link flex items-center justify-between py-2.5 border-b border-violet-500/10 text-slate-200 hover:text-violet-300 transition-colors"
           >
-            Menu
+            <span>🌌 DISCOVER DOMAINS</span>
+            <span class="text-xs text-violet-400">&rarr;</span>
           </a>
-        </div>
+          <a
+            href="/chronicle"
+            class="mobile-nav-link flex items-center justify-between py-2.5 border-b border-violet-500/10 text-slate-200 hover:text-pink-300 transition-colors"
+          >
+            <span>📰 THE CHRONICLE</span>
+            <span class="text-xs text-pink-400">&rarr;</span>
+          </a>
+          <a
+            href="/timeline"
+            class="mobile-nav-link flex items-center justify-between py-2.5 border-b border-violet-500/10 text-slate-200 hover:text-amber-300 transition-colors"
+          >
+            <span>⏳ UNIVERSE TIMELINE</span>
+            <span class="text-xs text-amber-400">&rarr;</span>
+          </a>
+          <a
+            href="/glossary"
+            class="mobile-nav-link flex items-center justify-between py-2.5 border-b border-violet-500/10 text-slate-200 hover:text-emerald-300 transition-colors"
+          >
+            <span>📖 SCIENTIFIC GLOSSARY</span>
+            <span class="text-xs text-emerald-400">&rarr;</span>
+          </a>
+          <a
+            href="/admin"
+            class="mobile-nav-link flex items-center justify-between py-2.5 text-violet-400 hover:text-violet-300 font-semibold"
+          >
+            <span>🛠️ CONTROL ROOM (/admin)</span>
+            <span class="text-xs">&rarr;</span>
+          </a>
+        </nav>
       </div>
     </header>
 
@@ -196,15 +255,50 @@ const siteUrl = Astro.site ? Astro.site.toString() : "https://the-cosmic-inquiry
           <div class="flex items-center gap-6">
             <span class="flex items-center gap-1.5 text-cyan-400">
               <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-              Netlify Production SSR
+              Netlify Production Edge
             </span>
             <span class="flex items-center gap-1.5 text-violet-400">
               <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
-              Supabase Core Engine
+              GitHub Cloud Repository
             </span>
           </div>
         </div>
       </div>
     </footer>
+
+    <!-- Mobile Drawer Interaction Script -->
+    <script is:inline>
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      if (menuBtn && drawer) {
+        menuBtn.addEventListener('click', () => {
+          const isOpen = !drawer.classList.contains('hidden');
+          if (isOpen) {
+            drawer.classList.add('hidden');
+            hamburgerIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+          } else {
+            drawer.classList.remove('hidden');
+            hamburgerIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+            menuBtn.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        // Close on link click
+        document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+          link.addEventListener('click', () => {
+            drawer.classList.add('hidden');
+            hamburgerIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+    </script>
   </body>
 </html>
